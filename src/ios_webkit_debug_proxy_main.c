@@ -37,6 +37,9 @@
 #include "webinspector.h"
 #include "websocket.h"
 
+#ifdef _MSC_VER
+#include "asprintf.h"
+#endif
 
 struct iwdpm_struct {
   char *config;

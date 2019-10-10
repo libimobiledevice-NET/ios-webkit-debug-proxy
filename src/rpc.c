@@ -22,6 +22,10 @@
 
 #include "rpc.h"
 
+#ifdef _MSC_VER
+#include "asprintf.h"
+#endif
+
 
 rpc_status rpc_parse_app(const plist_t node, rpc_app_t *app);
 void rpc_free_app(rpc_app_t app);

@@ -14,7 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 #ifdef WIN32
 #include <winsock2.h>
 #else
@@ -31,6 +33,10 @@
 
 #include "char_buffer.h"
 #include "webinspector.h"
+
+#ifdef _MSC_VER
+#include "asprintf.h"
+#endif
 
 
 #define WI_DEBUG 1

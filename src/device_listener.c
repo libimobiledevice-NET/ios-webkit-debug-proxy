@@ -13,10 +13,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 #ifdef WIN32
 #include <winsock2.h>
+#include <windows.h>
+static int wsa_init = 0;
 #else
 #include <resolv.h>
 #include <sys/fcntl.h>

@@ -13,9 +13,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <sys/fcntl.h>
-#include <sys/stat.h>
 #include <unistd.h>
+#else
+#include <fcntl.h>
+#endif
+#include <sys/stat.h>
 
 #include "char_buffer.h"
 #include "device_listener.h"
@@ -26,6 +30,9 @@
 #include "websocket.h"
 #include "strndup.h"
 
+#ifdef _MSC_VER
+#include "asprintf.h"
+#endif
 
 struct iwdp_idl_struct;
 typedef struct iwdp_idl_struct *iwdp_idl_t;

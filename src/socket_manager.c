@@ -13,10 +13,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
 #include <unistd.h>
+#endif
 #ifdef WIN32
 #include <winsock2.h>
+#include <windows.h>
+static int wsa_init = 0;
 #include <ws2tcpip.h>
 #else
 #include <netdb.h>
@@ -34,6 +38,10 @@
 #include "socket_manager.h"
 #include "hash_table.h"
 #include "strndup.h"
+
+#ifdef _MSC_VER
+#include "asprintf.h"
+#endif
 
 #if defined(__MACH__) || defined(WIN32)
 #define SIZEOF_FD_SET sizeof(struct fd_set)
