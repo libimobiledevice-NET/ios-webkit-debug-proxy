@@ -6,19 +6,22 @@ The ios_webkit_debug_proxy (aka _iwdp_) proxies requests from usbmuxd daemon ove
 
 iOS WebKit Debug Proxy works on Linux, MacOS & Windows.
 
-On a MacOS, it's easiest to install with [homebrew](http://brew.sh/):
+### MacOS
+
+It's easiest to install with [homebrew](http://brew.sh/):
 
 ```console
 brew install ios-webkit-debug-proxy
 ```
-
-On Windows, it's easiest to install with [scoop](http://scoop.sh/):
+### Windows
+It's easiest to install with [scoop](http://scoop.sh/):
 ```
 scoop bucket add extras
 scoop install ios-webkit-debug-proxy
 ```
+Note: you also need the latest version of [iTunes](https://www.apple.com/il/itunes/download/) installed.
 
-On Linux:
+### Linux
 
 Install dependencies available in apt repository:
 ```console
@@ -26,7 +29,7 @@ sudo apt-get install autoconf automake libusb-dev libusb-1.0-0-dev libplist-dev 
 ```
 
 Build and install dependencies that require more recent versions:
-- [libmobiledevice](https://github.com/libimobiledevice/libimobiledevice)
+- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
 - [libusbmuxd](https://github.com/libimobiledevice/libusbmuxd)
 - [usbmuxd](https://github.com/libimobiledevice/usbmuxd)
 - [libplist](https://github.com/libimobiledevice/libplist)
@@ -82,7 +85,7 @@ ios_webkit_debug_proxy can be used with many tools such as Chrome DevTools and S
 
 To use Chrome DevTools it's the recommendation to use the [RemoteDebug/remotedebug-ios-webkit-adapter](https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter) project, which has instructions on how to setup Chrome to remote debug iOS devices, much similar to Android debugging.
 
-The reason is that recent versions of Chrome and Safari there're major discrepancies between [Chrome Remote Debugging Protocol](https://developer.chrome.com/devtools/docs/debugger-protocol) and Apple's [Remote Web Inspector service](https://developer.apple.com/technologies/safari/developer-tools.html), which means that newer versions of Chrome DevTools aren't compatible with Safari.
+The reason is that in recent versions of Chrome and Safari there're major discrepancies between [Chrome Remote Debugging Protocol](https://developer.chrome.com/devtools/docs/debugger-protocol) and [Webkit Inspector Protocol](https://github.com/WebKit/webkit/tree/master/Source/JavaScriptCore/inspector/protocol), which means that newer versions of Chrome DevTools aren't compatible with Safari.
 
 #### Safari Web Inspector
 You can use Safari Web Inspector extracted from Webkit sources, e.g. [artygus/webkit-webinspector](https://github.com/artygus/webkit-webinspector).
@@ -195,21 +198,11 @@ or
 
 > Could not connect to lockdownd, error code -\<number\>. Exiting.
 
-Please upgrade libimobiledevice to version from master and rebuild ios-webkit-debug-proxy. Upcoming 1.2.1 has many fixes but not marked for release just yet. If you're on OS X:
-
-    brew update
-    brew uninstall --force libimobiledevice ios-webkit-debug-proxy usbmuxd
-    brew install --HEAD usbmuxd
-    brew install --HEAD libimobiledevice
-    brew install -s ios-webkit-debug-proxy
-
+Make sure you're using latest version of ios-webkit-debug-proxy
 
 ##### Inspectable pages list is empty for iOS >= 12.2
 
-Please upgrade usbmuxd to version from master
-
-    brew update
-    brew install --HEAD usbmuxd
+Make sure you're using latest version of ios-webkit-debug-proxy
 
 ##### Can not see Simulator
 
@@ -217,6 +210,15 @@ Please upgrade usbmuxd to version from master
   - Check that webinspector switch is enabled (Settings -> Safari -> Advanced -> Web Inspector)
   - Most likely simulator's web inspector daemon listens on ipv6 interface, check that you have `::1 localhost` line in `/etc/hosts`
 
+##### Building under Rosetta (OS X)
+
+libimobildevice formulae [depends on](https://github.com/Homebrew/homebrew-core/blob/d6c416caf0622f2aac47742bca679c3510d0b1d9/Formula/libimobiledevice.rb#L30) openssl@1.1, which is key-only and requires the following env paths for the build
+
+```console
+export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+```
 
 ##### If no luck so far...
 Lastly, always try replugging in the USB cable.
@@ -243,7 +245,6 @@ Google BSD license <https://developers.google.com/google-bsd-license>
 Copyright 2012 Google Inc.  <wrightt@google.com>
 
 The proxy uses the following open-source packages:
-   - [libplist 1.10](http://cgit.sukimashita.com/libplist.git)
-   - [libusbmuxd 1.0.8](http://cgit.sukimashita.com/usbmuxd.git/)
-   - [libimobiledevice 1.2.0](http://cgit.sukimashita.com/libimobiledevice.git)
-   - libimobiledevice 1.2.1 _if your target iOS10+_
+   - [libplist 2.2.0](http://cgit.sukimashita.com/libplist.git)
+   - [libusbmuxd 2.0.0](http://cgit.sukimashita.com/usbmuxd.git/)
+   - [libimobiledevice 1.3.0](http://cgit.sukimashita.com/libimobiledevice.git)

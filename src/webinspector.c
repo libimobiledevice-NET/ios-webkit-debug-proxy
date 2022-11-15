@@ -59,42 +59,6 @@ struct wi_private {
 // CONNECT
 //
 
-#ifndef HAVE_IDEVICE_CONNECTION_GET_FD
-// based on libimobiledevice 1.2.0
-enum connection_type {
-  CONNECTION_USBMUXD = 1
-};
-struct idevice_connection_private {
-  char *udid;  // added in v1.1.6
-  enum connection_type type;
-  void *data;
-  void *ssl_data;
-};
-
-wi_status idevice_connection_get_fd(idevice_connection_t connection,
-    int *to_fd) {
-  if (!connection || !to_fd) {
-    return WI_ERROR;
-  }
-  idevice_connection_private *c = (
-      (sizeof(*connection) == sizeof(idevice_connection_private)) ?
-      (idevice_connection_private *) connection : NULL);
-  if (!c || c->type != CONNECTION_USBMUXD || c->data <= 0) {
-    perror("Invalid idevice_connection struct.  Please verify that "
-        __FILE__ "'s idevice_connection_private matches your version of"
-        " libimbiledevice/src/idevice.h");
-    return WI_ERROR;
-  }
-  int fd = (int)(long)c->data;
-  struct stat fd_stat;
-  if (fstat(fd, &fd_stat) < 0 || !S_ISSOCK(fd_stat.st_mode)) {
-    perror("idevice_connection fd is not a socket?");
-    return WI_ERROR;
-  }
-  *to_fd = fd;
-  return WI_SUCCESS;
-}
-#else
 // based on latest libimobiledevice/src/idevice.h
 struct idevice_connection_private {
   idevice_t device;
@@ -102,7 +66,6 @@ struct idevice_connection_private {
   void *data;
   void *ssl_data;
 };
-#endif
 
 struct ssl_data_private {
 	SSL *session;
@@ -120,7 +83,7 @@ wi_status idevice_connection_get_ssl_session(idevice_connection_t connection,
       (sizeof(*connection) == sizeof(idevice_connection_private)) ?
       (idevice_connection_private *) connection : NULL);
 
-  if (!c || c->type != CONNECTION_USBMUXD || c->data <= 0) {
+  if (!c || c->data <= 0) {
     perror("Invalid idevice_connection struct. Please verify that "
         __FILE__ "'s idevice_connection_private matches your version of"
         " libimbiledevice/src/idevice.h");
@@ -153,7 +116,7 @@ int wi_connect(const char *device_id, char **to_device_id,
   SSL *ssl_session = NULL;
 
   // get phone
-  if (idevice_new(&phone, device_id)) {
+  if (idevice_new_with_options(&phone, device_id, IDEVICE_LOOKUP_USBMUX | IDEVICE_LOOKUP_NETWORK)) {
     fprintf(stderr, "No device found, is it plugged in?\n");
     goto leave_cleanup;
   }
