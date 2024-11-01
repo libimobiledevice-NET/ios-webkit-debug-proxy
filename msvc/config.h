@@ -20,5 +20,8 @@ typedef SSIZE_T ssize_t;
 #define PACKAGE_VERSION "libimobiledevice-win32"
 #define LIBIMOBILEDEVICE_VERSION "libimobiledevice-win32"
 #define LIBPLIST_VERSION "libimobiledevice-win32"
+#define LIBUSBMUXD_VERSION "libimobiledevice-win32"
+#define LIBPLIST_VERSION_MAJOR 2
+#define LIBPLIST_VERSION_MINOR 3
 
 #endif 
