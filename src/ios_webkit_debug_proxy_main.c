@@ -29,6 +29,8 @@
 #include <winsock2.h>
 #endif
 
+#include <openssl/opensslv.h>
+
 #include "device_listener.h"
 #include "hash_table.h"
 #include "ios_webkit_debug_proxy.h"
@@ -68,6 +70,9 @@ static void on_signal(int sig) {
 int main(int argc, char** argv) {
   signal(SIGINT, on_signal);
   signal(SIGTERM, on_signal);
+#ifndef WIN32
+  signal(SIGPIPE, SIG_IGN);
+#endif
 
 #ifdef WIN32
   WSADATA wsa_data;
@@ -218,7 +223,7 @@ void iwdpm_free(iwdpm_t self) {
   }
 }
 
-iwdpm_t iwdpm_new(int argc, char **argv, int *to_exit) {
+iwdpm_t iwdpm_new() {
   iwdpm_t self = malloc(sizeof(struct iwdpm_struct));
   if (!self) {
     return NULL;
@@ -263,8 +268,9 @@ int iwdpm_configure(iwdpm_t self, int argc, char **argv) {
       case 'V':
         printf(
             "%s\n"
-            "Built with libimobiledevice v%s, libplist v%s\n",
-            PACKAGE_STRING, LIBIMOBILEDEVICE_VERSION, LIBPLIST_VERSION);
+            "Built with libimobiledevice v%s, libplist v%s, libusbmuxd v%s, %s\n",
+            PACKAGE_STRING, LIBIMOBILEDEVICE_VERSION, LIBPLIST_VERSION,
+            LIBUSBMUXD_VERSION, OPENSSL_VERSION_TEXT);
         ret = -2;
         break;
       case 'u':

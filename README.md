@@ -29,10 +29,11 @@ sudo apt-get install autoconf automake libusb-dev libusb-1.0-0-dev libplist-dev 
 ```
 
 Build and install dependencies that require more recent versions:
-- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
-- [libusbmuxd](https://github.com/libimobiledevice/libusbmuxd)
-- [usbmuxd](https://github.com/libimobiledevice/usbmuxd)
 - [libplist](https://github.com/libimobiledevice/libplist)
+- [libimobiledevice-glue](https://github.com/libimobiledevice/libimobiledevice-glue)
+- [libusbmuxd](https://github.com/libimobiledevice/libusbmuxd)
+- [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
+- [usbmuxd](https://github.com/libimobiledevice/usbmuxd)
 
 Build and install `ios-webkit-debug-proxy`:
 ```console
@@ -83,12 +84,10 @@ ios_webkit_debug_proxy can be used with many tools such as Chrome DevTools and S
 
 #### Chrome Devtools
 
-To use Chrome DevTools it's the recommendation to use the [RemoteDebug/remotedebug-ios-webkit-adapter](https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter) project, which has instructions on how to setup Chrome to remote debug iOS devices, much similar to Android debugging.
-
-The reason is that in recent versions of Chrome and Safari there're major discrepancies between [Chrome Remote Debugging Protocol](https://developer.chrome.com/devtools/docs/debugger-protocol) and [Webkit Inspector Protocol](https://github.com/WebKit/webkit/tree/master/Source/JavaScriptCore/inspector/protocol), which means that newer versions of Chrome DevTools aren't compatible with Safari.
+In recent versions of Chrome and Safari there're major discrepancies between [Chrome Remote Debugging Protocol](https://developer.chrome.com/devtools/docs/debugger-protocol) and [Webkit Inspector Protocol](https://github.com/WebKit/webkit/tree/master/Source/JavaScriptCore/inspector/protocol), which means that newer versions of Chrome DevTools aren't compatible with Safari.
 
 #### Safari Web Inspector
-You can use Safari Web Inspector extracted from Webkit sources, e.g. [artygus/webkit-webinspector](https://github.com/artygus/webkit-webinspector).
+You can use Safari Web Inspector extracted from Webkit sources, e.g. [artygus/webkit-webinspector](https://github.com/artygus/webkit-webinspector) or [HimbeersaftLP/ios-safari-remote-debug-kit](https://github.com/HimbeersaftLP/ios-safari-remote-debug-kit).
 
 #### Firefox DevTools via Valence
 Another option is [mozilla/valence](https://github.com/mozilla/valence) which enables Firefox DevTools to be used with iOS.
@@ -174,10 +173,6 @@ ios_webkit_debug_proxy: error while loading shared libraries: libimobiledevice.s
 ```
 
 Run `sudo ldconfig`
-
-##### ssl sendq retry failed: Undefined error: 0
-
-should only happen with versions > 1.8.5, make sure ios-webkit-debug-proxy is built with same version of libssl that libimobildevice was built with
 
 ##### idevice_id not found
 
